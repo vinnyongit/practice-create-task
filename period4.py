@@ -1,8 +1,5 @@
-# This program is a simulation of Rock Paper Scissors with an AI
-
 selections = ["Rock", "Paper", "Scissors"]
 player_selection = input("Would you like to select Rock, Paper, or Scissors?")
-
 import random
 ai_selection = random.choice(selections)
 print("Your opponent selected " + ai_selection + "!")
