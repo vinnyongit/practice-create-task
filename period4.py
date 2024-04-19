@@ -1,38 +1,44 @@
-def print_board(board):
-    for row in board:
-        print(" | ".join(row))
-        print("-" * 9)
-def check_winner(board, player):
-    for row in board:
-        if all(cell == player for cell in row):
-            return True
-    for col in range(3):
-        if all(board[row][col] == player for row in range(3)):
-            return True
-    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
-        return True
-    return False
-def is_board_full(board):
-    return all(cell != " " for row in board for cell in row)
-def play_game():
-    board = [[" " for _ in range(3)] for _ in range(3)]
-    current_player = "X"
-    print("Welcome to Tic-Tac-Toe!")
-    print_board(board)
+import random
+
+def choose_word():
+    words = ["apple", "banana", "orange", "grape", "strawberry", "watermelon", "pineapple"]
+    return random.choice(words)
+
+def display_word(word, guessed_letters):
+    displayed_word = ""
+    for letter in word:
+        if letter in guessed_letters:
+            displayed_word += letter
+        else:
+            displayed_word += "_"
+    return displayed_word
+
+def hangman():
+    word = choose_word()
+    guessed_letters = []
+    attempts = 6
+
+    print("Welcome to Hangman!")
+    print("The word has", len(word), "letters.")
+
     while True:
-        row = int(input(f"Player {current_player}, enter the row (0, 1, 2): "))
-        col = int(input(f"Player {current_player}, enter the column (0, 1, 2): "))
-        if row < 0 or row > 2 or col < 0 or col > 2 or board[row][col] != " ":
-            print("Invalid move. Try again.")
-            continue
-        board[row][col] = current_player
-        print_board(board)
-        if check_winner(board, current_player):
-            print(f"Player {current_player} wins!")
-            break
-        elif is_board_full(board):
-            print("It's a draw!")
-            break
-        current_player = "O" if current_player == "X" else "X"
-if __name__ == "__main__":
-    play_game()
+        print("\nWord:", display_word(word, guessed_letters))
+        print("Attempts left:", attempts)
+        guess = input("Guess a letter: ").lower()
+
+        if guess in guessed_letters:
+            print("You already guessed that letter.")
+        elif guess in word:
+            guessed_letters.append(guess)
+            if set(word) == set(guessed_letters):
+                print("Congratulations! You guessed the word:", word)
+                break
+        else:
+            guessed_letters.append(guess)
+            attempts -= 1
+            print("Incorrect guess.")
+            if attempts == 0:
+                print("You ran out of attempts! The word was:", word)
+                break
+
+hangman()
